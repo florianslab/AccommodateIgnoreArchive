@@ -1,0 +1,92 @@
+<div id="Instructions">
+<p> You are going to play a guessing game, in which you take on the role of a detective that is trying to identify suspects based on very partial information about what their activities are during a certain week. Your assistant reports some conclusions about the suspect's activities during that week, which you assume to be correct. In addition, your department provided information about two suspects, in the form of pictures showing their activities throughout the week.</p>
+
+<p>Your job is to choose amongst the pictures the one picture that you think is most likely to depict the culprit, based on your assistant's report. Note that in some cases, your department was not able to figure out what the suspect did that day - as indicated by a '?' in the calendar. A 'X' in the calendar means that the subject wasn't in town that day.</p>
+
+<p>Also, while the real culprit generally is amongst the suspects depicted, the administrators occasionally make mistakes, and you're actually looking at two innocent people. Even so, your job requires you to make a choice between the two shown in all cases. However, after making your choice, you get to indicate how confident you were in your decision. While you should make careful choices throughout, you should also trust your gut feeling and not overthink any particular case, so that you can get all your work done.</p>
+
+
+<p> Entering choices is straightforward: simply indicate the picture you chose by entering '<span style="font-weight: bold;">Q</span>' for the left picture or '<span style="font-weight: bold;">Y</span>' for the right picture.</p>
+
+<p> Indicate how confident you are by using the number keys 1-5 ranging from 'not confident' to 'very confident'.</p>
+
+<p> Let's practice what you need to do so that you can try out how this works!</p>
+
+</div>
+      
+<script type="text/javascript">
+//<![CDATA[
+
+  var filesToLoad = [], pending = [];
+  var p = $(document.createElement("p")).html("Please wait while the resources are being loaded...")
+                                        .css({"text-color": "grey", "font-style": "italic"});
+  $(".Message-continue-link").css("display","none");
+  $("#Instructions").append(p);
+  
+  setTimeout(function () { 
+    if (filesToLoad.length > 0)
+      $(".Message-continue-link").css("display","none"); 
+  }, 100);
+
+  
+function loadFile() {
+  var file;
+  if (filesToLoad.length)
+    file = filesToLoad.pop();
+  else if (pending.length)
+    file = pending.shift();
+  else {
+    $(".Message-continue-link").css("display","block");
+    p.css("display","none");
+    clearInterval(interval);
+    return;
+  }
+  var ext = file.split(".").pop();
+  console.log("Loading "+file+", extension: "+ext);
+  if (ext.toLowerCase() == "png") {
+        pending.push(file);
+        var img = new Image();
+        img.onload = isAppLoaded;
+        img.src = file;
+  } 
+  else if (ext.toLowerCase() == "wav") {
+        pending.push(file);
+        var audio = new Audio();
+        audio.addEventListener('canplaythrough', isAppLoaded, false);
+        audio.src = file;
+  }
+}
+
+
+function isAppLoaded()
+{
+  var fileLoaded = pending.shift();
+  if (filesToLoad.length || pending.length)
+    loadFile();
+  else {
+      $(".Message-continue-link").css("display","block");
+      p.css("display","none");
+      clearInterval(interval);
+  }
+}
+  
+    var colnames = data[0]
+    var groups = {};
+
+    // Going through Data
+    for (i in data){
+        if (i == 0) continue; // ignore the first line (colnames)
+        var row = {};
+        for (n in data[i]) { row[colnames[n]] = data[i][n]; }
+        if (row.group == groupNum) {
+          filesToLoad.push("http://files.lab.florianschwarz.net/ibexfiles/GlobAccom/GA2/images/pic1_i"+row.item+"_g"+row.Condition+".png");
+          filesToLoad.push("http://files.lab.florianschwarz.net/ibexfiles/GlobAccom/GA2/images/pic2_i"+row.item+"_g"+row.Condition+".png");
+          filesToLoad.push("http://files.lab.florianschwarz.net/ibexfiles/GlobAccom/GA2/sf/"+row.item+row.Trigger+"-context.wav");
+          filesToLoad.push("http://files.lab.florianschwarz.net/ibexfiles/GlobAccom/GA2/sf/"+row.item+row.Trigger+"-sentence.wav");
+        }
+    }
+  
+    interval = setInterval(loadFile, 100);
+  
+//]]>
+</script>
